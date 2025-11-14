@@ -1,16 +1,21 @@
-# pts-minix1.5-hdd-image: bootable HDD image of Minix 1.5.10 i86 and i386
+# pts-minix-1.5.10-hdd-image: bootable HDD image of Minix 1.5.10 i86 and i386
 
-pts-minix1.5-hdd-image provides bootable HDD disk image containing Minix
+pts-minix-1.5.10-hdd-image provides bootable HDD disk image containing Minix
 1.5.10 i86 and i386. It works in QEMU >=2.11.1, VirtualBox and possibly
 other emulators.
 
-Most of the Minix files are dated between 2003-01-04 and 2003-01-11.
+Most of the Minix files with the image are dated between 2003-01-04 and
+2003-01-11.
 
 ## Instructions for runnig it on Linux in QEMU
 
-Download the file MINIX15.vhd.zip and uncompress it with `unzip MINIX15.vhd.zip`.
+Download the file
+[MINIX15.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v1/MINIX15.vhd.zip)
+(`wget -O MINIX15.vhd.zip
+https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v1/MINIX15.vhd.zip`),
+and uncompress it with `unzip MINIX15.vhd.zip`.
 
-Optionally you can inspect the contents of the 4 filesystems.
+Optionally, you can inspect the contents of the 4 filesystems:
 
 ```
 mkdir -p p1 p2 p3 p4
@@ -26,15 +31,43 @@ Install QEMU. On Debian and Ubuntu, the install command is `sudo apt-get
 install qemu-system-x86`. The command `qemu-system-i386 --version` should
 work. The version number it displays should be >=2.11.1.
 
-Run this command to start the emulator:
-`qemu-system-i386 -M pc-1.0 -m 4 -drive file=MINIX15.vhd,format=raw -boot c
--debugcon stdio -net none`. At the newly appearing `Boot:` prompt, press <2>
-for Minix 1.5.10 i386, or <4> for Minix 1.5.10 i86. After a few seconds,
-the `login:` prompt appears. Type `root` and press <Enter>. There is no
-password.
+Run this command to start the emulator running Minix 1.5.10:
+`qemu-system-i386 -M pc-1.0 -m 4 -drive file=MINIX15.vhd,format=vpc -boot c
+-debugcon stdio -net none`. (VirtualBox also works, but the VM guest setup
+is different.) At the newly
+appearing `Boot:` prompt, press <2> for Minix 1.5.10 i386, or <4> for Minix
+1.5.10 i86. After a few seconds, the `login:` prompt appears. Type `root`
+and press <Enter>. There is no password.
 
-To undo the changes you've made in the emulator, remove the image file and
-uncompress it again: `rm -f MINIX15.vhd && unzip MINIX15.vhd.zip`.
+To undo the changes you've made, exit the emulator (by closing its window),
+remove the image file and uncompress it again: `rm -f MINIX15.vhd && unzip
+MINIX15.vhd.zip`.
+
+## Extra goodies
+
+The following extra software (in addition to Minix binaries and source code)
+are also included:
+
+* On partition 1:
+  * MX386/MX386_1.TZ: Minix 1.5.10 i386 patches by Bruce Evans.
+  * MX386/BCC*.TZ: The BCC C compiler (targeting i86 and i386) by Bruce Evans.
+  * MX386/SHOELACE.TZ: ShoeLace bootloader 1990-04-24 source code. Can be
+    found on other partitions as well.
+* On partition 2:
+  * bin/sh is Bash 1.05.
+  * linux/bash-1.05: Bash 1.05 source code.
+  * linux/rootdisk/root-0.11: Linux 0.11 rootdisk binaries.
+  * linux/rootdisk/root-0.97: Linux 0.97 rootdisk binaries.
+  * linux/src: Linux 0.11, 0.12 and 0.95 source code.
+  * root/as86: source code of an early version of the as86 assembler and ld86 linker.
+  * root/gcc140: source code of GCC 1.40.
+  * root/gdb.tar.Z: Patches and binaries of GDB 3.5 for Minix 1.5.0 i386.
+* On partition 3:
+  * src/programs/awk: GNU AWK (gawk) 1.02 source code.
+  * src/programs/bisn: GNU Bison 1.14 source code.
+  * src/programs/bison-1.14: GNU Bison 1.14 source code.
+  * src/programs/cpp: GNU C Preprocessor source code.
+  * src/programs/gawk: GNU AWK (gawk) 2.11 source code.
 
 ## Source
 
