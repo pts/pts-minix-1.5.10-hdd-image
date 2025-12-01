@@ -84,14 +84,14 @@ $ touch -r MINIX15.gho MINIX15.vhd
 https://oldinux.org/ claims that this HDD image was the environment where
 Linus Torvalds developed the early versions of Linux (before 1.0). However,
 the last-modification timestamps don't confirm this: such early Linux
-development was happened before 1994, and the timestamps of the Minix files
+development has happened before 1994, and the timestamps of the Minix files
 on the HDD image are in 2003-01. Nevertheless, the disk image contains some
 early source files of Linux 0.11 and 0.97.
 
 The Perl script ghost2vhd.pl was written by reverse engineering the contents
 of MINIX15.gho. This file can be converted back (restored) to a disk image
 using Norton Ghost 8.0 or 2003. It doesn't work with Norton Ghost 7.5, 9.0
-or 11.5. Please note that Norton Ghosts, when restoring, moves partitions
+or 11.5. Please note that Norton Ghost, when restoring, moves partitions
 around and changes the disk geometry information in FAT filesystem boot
 sectors. These changes have been undone manually.
 
