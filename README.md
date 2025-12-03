@@ -13,7 +13,7 @@ Download the file
 [MINIX15.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v1/MINIX15.vhd.zip)
 (`wget -O MINIX15.vhd.zip
 https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v1/MINIX15.vhd.zip`),
-and uncompress it with `unzip MINIX15.vhd.zip`.
+and uncompress it with `unzip -o MINIX15.vhd.zip` or `gunzip -S.zip -fk MINIX15.vhd.zip'.
 
 Optionally, you can inspect the contents of the 4 filesystems:
 
@@ -41,7 +41,7 @@ and press <Enter>. There is no password.
 
 To undo the changes you've made, exit the emulator (by closing its window),
 remove the image file and uncompress it again: `rm -f MINIX15.vhd && unzip
-MINIX15.vhd.zip`.
+-o MINIX15.vhd.zip`.
 
 ## Extra goodies
 
