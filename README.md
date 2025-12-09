@@ -272,3 +272,99 @@ around and changes the disk geometry information in FAT filesystem boot
 sectors. These changes have been undone manually.
 
 Running ghost2vhd.pl requires only Perl, and it doesn't need Norton Ghost.
+
+## The partial story of Minix 1.5.10 i386
+
+Minix 1.5.10 i86 (for the Intel 8086 CPU, with ability to use up to 16 MiB
+of memory on 286+) was officially released on on 1990-06-01 [Minix 1.5.10
+i86 official
+download](http://download.minix3.org/previous-versions/Intel-1.5/). It
+contained the kernel (both source code and binaries), the commands (both
+source code and binaries) and configuration files. The source code of the
+custom-modified ACK C compiler (/usr/lib/cpp, /usr/lib/cem, /usr/lib/opt,
+/usr/lib/cg), the assembler (/usr/bin/asld) and the linker (also
+/usr/bin/asld) was missing, but the soure code of the C compiler driver
+(/usr/bin/cc, it just runs the others) and the source code of the C library
+(i.e. libc) were included.
+
+Most of Minix 1.5.10 (and earlier versions) has been written by Andrew S.
+Tanenbaum (with contributions from others) and copyright Prentical Hall (a
+publishing company defunct since 2020), so Minix had been proprietary
+software in the 1980s and 1990s. Prentice Hall has also published multiple
+educational (paper) books written by Andrew S. Tanenbaum about operating
+systems in general and Minix in particular. Buyers of some of these books
+also got automatically a license to use Minix. The most influential book,
+*Operating Systems: Design and Implementation*, co-authored by Albert S.
+Woodhull, published in 1987 by Prentice Hall includes the source code of
+Minix 1.0 i86. Between 1988 and 1990, multiple Minix reference manual books
+have been written by Andrew S. Tanenbaum, and published by Prentice Hall.
+None of the books mentioned in this paragraph are freely available for
+download in 2025. However, Minix
+was released as open source under the 3-clause BSD license on 2000-04-07,
+applying retroactively to versions released earlier as well, see the
+[announcement](https://web.archive.org/web/20250726134343/https://minix1.woodhull.com/faq/mxlicense.html).
+
+The document *Reference Manual for the
+Minix 1.5 Demonstration Disk* (1991)
+[demoman.pdf](https://web.archive.org/web/20230531061144/https://www.pliner.com/macminix/documentation/demoman.pdf)
+is available as a separate download. It has many chapters missing, such as
+the install instructions.
+
+There had been no official Minix 1.5.x i386 or Minix 1.6.x release (with
+userspace programs using the i386 32-bit protected mode instruction set and
+being able to use more than 64 KiB of data per process) by Andrew S.
+Tanenbaum (or other Minix authors) so far. [Minix
+1.7.0](http://download.minix3.org/previous-versions/Intel-1.7/) was released
+for both i86 and i386 on 1995-05-30. However, there have been unofficial
+ports by the community: Minix 1.5.10 has been ported (from i86) to i386 by
+Bruce Evans, and Minix 1.6.25 has been also been ported to i386 by Kees J.
+Bot and Philip Homburg (as Minix-386vm 1.6.25.1), and later they also
+published Minix-vmd 1.7.0, which is also a port to the i386, based on Minix
+1.7.0 i386 and all other earlier work above. Minix-386vm and Minix-vmd add
+virtual memory support (including swapping and larger virtual address spaces
+for processes), better memory protection and official X11 (GUI) support.
+
+The first (still unofficial, community-maintained) port of Minix to i386 was
+Minix 1.5.10 i386 by Bruce Evans, released between 1990-06-14 and
+1990-07-11, only a few days after the official Minix 1.5.10 i86 release. It
+consisted of the following files:
+
+|   size|date       |filename |description |
+|-------|-----------|---------|------------|
+|  12063|1990-06-14|[bcc.tar.Z](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/minix-1.5.10-i386-patches/bcc.tar.Z)             |source file bcc.c, the C compiler driver|
+| 121962|1990-06-15|[bccbin16.tar.Z](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/minix-1.5.10-i386-patches/bccbin16.tar.Z)   |BCC C compiler, assembler and linker binaries running on Minix 1.5.10 i86,  targeting Minix 1.5.10 i86 and i386|
+| 118254|1990-06-15|[bccbin32.tar.Z](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/minix-1.5.10-i386-patches/bccbin32.tar.Z)   |BCC C compiler, assembler and linker binaries running on Minix 1.5.10 i386, targeting Minix 1.5.10 i86 and i386|
+|  43492|1990-06-15|[bcclib.tar.Z](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/minix-1.5.10-i386-patches/bcclib.tar.Z)       |C library (libc) source code and /usr/include fixes for Minix 1.5.10 i86 and i386|
+|  45155|1990-06-15|[mx386_1.1.t.Z](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/minix-1.5.10-i386-patches/mx386_1.1.t.Z)     |kernel source patches for Minix 1.5.10 i86 to change it to i386|
+|   3623|1990-07-11|[mx386_1.1.01.Z](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/minix-1.5.10-i386-patches/mx386_1.1.01.Z)   |bugfix kernel source patches for Minix 1.5.10 i386|
+
+In 2025-11, the files above were not available for download anymore, so I've
+re-uploaded them as
+[https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/tag/minix-1.5.10-i386-patches](minix-1.5.10-i386-patches).
+
+Because of licensing reasons, it was not allowed for the community to
+release installer floppy images with precompiled binaries of Minix 1.5.10
+i386, because Prentice Hall owned the copyright of Minix 1.5.10. Thus Minix
+1.5.10 i386 was released as the files above, which contained some new
+binaries and source code patches to Minix 1.5.10 i86. On 1990-12-03, John
+Nall wrote the tutorial
+[tutor.asc](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/minix-1.5.10-i386-patches/tutor.asc)
+on creating a Minix 1.5.10 i386 system based on an already installed Minix
+1.5.10 i86 system and the files above released by Bruce Evans.
+
+The reason why a new C compiler was needed for Minix 1.5.10 i386 is that the
+modified ACK C compiler in Minix 1.5.10 i86 didn't support the i386 target
+instruction set. The vanilla [ACK C compiler](https://tack.sf.net/) has
+already supported the i386 target instruction set in 1991-09-18, but ACK was
+open sourced much later, in 2003-04 under the 3-clause BSD license, so it
+couldn't be used in 1990-06 for porting Minix. Bruce Evens has already
+written his C compiler BCC. Please note that BCC is a non-optimizing
+compiler, so it generates long and slow code. (An optimizer has been added
+later, but the stability of the i386 optimizer output is unclear.)
+
+The source code of the BCC C compiler targeting Minix 1.5.10 i86 and i386
+has never been released. Bruce Evans continued releasing new versions of the
+BCC C compiler as part of [Dev86](https://github.com/lkundrak/dev86), but
+targeting both i86 and i386 (selectable by a command-line flag). Bruce Evans
+continued releasing new versions of the assembler and the linker as well,
+first as part of as86, then within Dev86.
