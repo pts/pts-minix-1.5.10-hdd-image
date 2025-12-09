@@ -276,9 +276,9 @@ Running ghost2vhd.pl requires only Perl, and it doesn't need Norton Ghost.
 ## The partial story of Minix 1.5.10 i386
 
 Minix 1.5.10 i86 (for the Intel 8086 CPU, with ability to use up to 16 MiB
-of memory on 286+) was officially released on on 1990-06-01 [Minix 1.5.10
+of memory on 286+) was officially released on 1990-06-01 (see [Minix 1.5.10
 i86 official
-download](http://download.minix3.org/previous-versions/Intel-1.5/). It
+download](http://download.minix3.org/previous-versions/Intel-1.5/)). It
 contained the kernel (both source code and binaries), the commands (both
 source code and binaries) and configuration files. The source code of the
 custom-modified ACK C compiler (/usr/lib/cpp, /usr/lib/cem, /usr/lib/opt,
