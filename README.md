@@ -364,7 +364,17 @@ later, but the stability of the i386 optimizer output is unclear.)
 
 The source code of the BCC C compiler targeting Minix 1.5.10 i86 and i386
 has never been released. Bruce Evans continued releasing new versions of the
-BCC C compiler as part of [Dev86](https://github.com/lkundrak/dev86), but
+BCC C compiler as part of [Dev86](https://github.com/lkundrak/dev86),
 targeting both i86 and i386 (selectable by a command-line flag). Bruce Evans
 continued releasing new versions of the assembler and the linker as well,
-first as part of as86, then within Dev86.
+first as part of as86, then within Dev86. The source code of the linker
+which can read the Minix 1.5.10 ar .a archive format (such as
+/usr/local/lib/i386/libc.a) has never been released.
+
+## C compilers in early Minix versions
+
+* Minix 1.5.10 i86: ACK.
+* The unofficial, community-maintained Minix 1.5.10 i386: BCC.
+* Minix-386vm 1.6.25.1 i386: BCC (bcc command), GCC (gcc command), C386 (ccc command).
+* Minix 1.7.0 i86 and i386: ACK.
+* Minix-vmd 1.7.0 i386: ACK, GCC.
