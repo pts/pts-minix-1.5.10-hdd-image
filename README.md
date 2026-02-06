@@ -53,17 +53,25 @@ i86](http://download.minix3.org/previous-versions/Intel-1.5/) release
 (1990-06-01). It contains only a few config file changes.
 
 Download the file
-[minix-1.5.10-i86.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86.vhd.zip)
-`wget -O minix-1.5.10-i86.vhd.zip
-https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86.vhd.zip`),
-and decompress it with `unzip -o minix-1.5.10-i86.vhd.zip` or
-`gunzip -S.zip -fk minix-1.5.10-i86.vhd.zip`.
+[minix-1.5.10-i86.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86.vhd.zip):
+
+```
+wget -O minix-1.5.10-i86.vhd.zip https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86.vhd.zip
+```
+
+, and decompress it with
+
+```
+unzip -o minix-1.5.10-i86.vhd.zip
+```
+
+or `gunzip -S.zip -fk minix-1.5.10-i86.vhd.zip`.
 
 Optionally, you can inspect the contents of the filesystem:
 
 ```
 mkdir -p p
-sudo mount -t minix -o ro,loop minix-1.5.10-i86.vhd p2
+sudo mount -t minix -o ro,loop minix-1.5.10-i86.vhd p
 find p -depth -type f
 ls -ld p/minix
 sudo umount p
@@ -74,15 +82,19 @@ install qemu-system-x86`. The command `qemu-system-i386 --version` should
 work. The version number it displays should be >=2.11.1.
 
 Run this command to start the emulator running Minix 1.5.10:
-`qemu-system-i386 -M pc-1.0 -m 4 -drive file=minix-1.5.10-i86.vhd,format=vpc
--boot c -debugcon stdio -net none`. (VirtualBox also works, but the VM guest
+
+```
+qemu-system-i386 -M pc-1.0 -m 4 -drive file=minix-1.5.10-i86.vhd,format=vpc -boot c -debugcon stdio -net none -enable-kvm
+```
+
+(VirtualBox also works, but the VM guest
 setup is different.) In the newly appearing black QEMU window, in less than
 a second, at the `login:` prompt, type `root` and press <Enter>. There is no
 password.
 
 To undo the changes you've made, exit the emulator (by closing its window),
-remove the image file and decompress it again: `rm -f MINIX15.vhd && unzip
--o MINIX15.vhd.zip`.
+remove the image file and decompress it again: `rm -f minix-1.5.10-i86.vhd && unzip
+-o minix-1.5.10-i86.vhd.zip`.
 
 The HDD disk image contains a single Minix v1 filesystem of size ~64 MiB,
 which is the maximum Minix v1 filesystem size, and Minix 1.5.10 doesn't
@@ -113,17 +125,24 @@ i86](http://download.minix3.org/previous-versions/Intel-1.5) release
 few config file changes.
 
 Download the file
-[minix-1.5.10-i86-and-goodies.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86-and-goodies.vhd.zip)
-`wget -O minix-1.5.10-i86-and-goodies.vhd.zip
-https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86-and-goodies.vhd.zip`),
-and decompress it with `unzip -o minix-1.5.10-i86-and-goodies.vhd.zip` or
-`gunzip -S.zip -fk minix-1.5.10-i86-and-goodies.vhd.zip`.
+[minix-1.5.10-i86-and-goodies.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86-and-goodies.vhd.zip):
+
+```
+wget -O minix-1.5.10-i86-and-goodies.vhd.zip https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v2/minix-1.5.10-i86-and-goodies.vhd.zip
+```
+
+, and decompress it with
+
+```
+unzip -o minix-1.5.10-i86-and-goodies.vhd.zip```
+
+or `gunzip -S.zip -fk minix-1.5.10-i86-and-goodies.vhd.zip`.
 
 Optionally, you can inspect the contents of the filesystem:
 
 ```
 mkdir -p p
-sudo mount -t minix -o ro,loop minix-1.5.10-i86-and-goodies.vhd p2
+sudo mount -t minix -o ro,loop minix-1.5.10-i86-and-goodies.vhd p
 find p -depth -type f
 sudo umount p
 ```
@@ -133,16 +152,19 @@ install qemu-system-x86`. The command `qemu-system-i386 --version` should
 work. The version number it displays should be >=2.11.1.
 
 Run this command to start the emulator running Minix 1.5.10:
-`qemu-system-i386 -M pc-1.0 -m 4 -drive
-file=minix-1.5.10-i86-and-goodies.vhd,format=vpc -boot c
--debugcon stdio -net none`. (VirtualBox also works, but the VM guest setup
+
+```
+qemu-system-i386 -M pc-1.0 -m 4 -drive file=minix-1.5.10-i86-and-goodies.vhd,format=vpc -boot c -debugcon stdio -net none -enable-kvm
+```
+
+(VirtualBox also works, but the VM guest setup
 is different.) In the newly appearing black QEMU window, in less than a
 second, at the `login:` prompt, type `root` and press <Enter>. There is no
 password.
 
 To undo the changes you've made, exit the emulator (by closing its window),
-remove the image file and decompress it again: `rm -f MINIX15.vhd && unzip
--o MINIX15.vhd.zip`.
+remove the image file and decompress it again: `rm -f minix-1.5.10-i86-and-goodies.vhd && unzip
+-o minix-1.5.10-i86-and-goodies.vhd.zip`.
 
 The HDD disk image contains a single Minix v1 filesystem of size ~64 MiB,
 which is the maximum Minix v1 filesystem size, and Minix 1.5.10 doesn't
@@ -185,9 +207,18 @@ Most of the Minix files with the image are dated between 2003-01-04 and
 
 Download the file
 [MINIX15.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v1/MINIX15.vhd.zip)
-(`wget -O MINIX15.vhd.zip
-https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v1/MINIX15.vhd.zip`),
-and decompress it with `unzip -o MINIX15.vhd.zip` or `gunzip -S.zip -fk MINIX15.vhd.zip`.
+
+```
+wget -O MINIX15.vhd.zip https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v1/MINIX15.vhd.zip
+```
+
+, and decompress it with
+
+```
+unzip -o MINIX15.vhd.zip
+```
+
+or `gunzip -S.zip -fk MINIX15.vhd.zip`.
 
 Optionally, you can inspect the contents of the 4 filesystems:
 
@@ -206,12 +237,16 @@ install qemu-system-x86`. The command `qemu-system-i386 --version` should
 work. The version number it displays should be >=2.11.1.
 
 Run this command to start the emulator running Minix 1.5.10:
-`qemu-system-i386 -M pc-1.0 -m 4 -drive file=MINIX15.vhd,format=vpc -boot c
--debugcon stdio -net none`. (VirtualBox also works, but the VM guest setup
-is different.) In the newly appearing QEMU window, at the
-`Boot:` prompt, press <2> for Minix 1.5.10 i386, or <4> for Minix
-1.5.10 i86. After a few seconds, the `login:` prompt appears. Type `root`
-and press <Enter>. There is no password.
+
+````
+qemu-system-i386 -M pc-1.0 -m 4 -drive file=MINIX15.vhd,format=vpc -boot c -debugcon stdio -net none -enable-kvm
+```
+
+(VirtualBox also works, but the VM guest setup
+is different.) In the newly appearing QEMU window, at the `Boot:` prompt,
+press <2> for Minix 1.5.10 i386 on partition 2, or <4> for Minix 1.5.10 i86
+on partition 4. After a few seconds, the `login:` prompt appears. Type
+`root` and press <Enter>. There is no password.
 
 To undo the changes you've made, exit the emulator (by closing its window),
 remove the image file and decompress it again: `rm -f MINIX15.vhd && unzip
@@ -273,6 +308,154 @@ sectors. These changes have been undone manually.
 
 Running ghost2vhd.pl requires only Perl, and it doesn't need Norton Ghost.
 
+## Running Linux 1.0.4 on Linux in QEMU
+
+[MCC
+1.0](https://www.ibiblio.org/pub/historic-linux/distributions/MCC-1.0/1.0/)
+is one of the earliest Linux distributions. It was released on 1994-05-11,
+it runs on i386, and it contains Linux kernel 1.0.4, GCC 2.5.8, Bash 1.13.1,
+`/lib/libc.so.4.5.21`, GNU Assembler 2.2, GNU linker 2.2. It supports the
+Minix v1 and ext2 filesystems, and can boot from them.
+
+For your convenience, a preinstalled, ready-to-run MCC 1.0 binary image (no
+source code) is provided, based on the official [MCC
+1.0](https://www.ibiblio.org/pub/historic-linux/distributions/MCC-1.0/1.0/)
+install floppies (1994-05-11)
+(kernel compressed floppy [nocdboot](https://www.ibiblio.org/pub/historic-linux/distributions/MCC-1.0/1.0/images/nocdboot.gz),
+installer root filesystem compressed floppy [root](https://www.ibiblio.org/pub/historic-linux/distributions/MCC-1.0/1.0/images/root.gz),
+GCC compressed floppies [gcca.tgz](https://www.ibiblio.org/pub/historic-linux/distributions/MCC-1.0/1.0/packages/gcca.tgz)
+and [gccb.tgz](https://www.ibiblio.org/pub/historic-linux/distributions/MCC-1.0/1.0/packages/gccb.tgz)).
+It contains only a few config file changes. The HDD disk image contains a
+single, bootable ~64 MiB Minix v1 filesystem on the top level (not in a
+partition) with maximum filename length of 30 bytes.
+
+Download the file
+[linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v3/linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd.zip):
+
+```
+wget -O linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd.zip https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v3/linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd.zip
+```
+
+, and decompress it with
+
+```
+unzip -o linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd.zip
+```
+
+or `gunzip -S.zip -fk linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd.zip`.
+
+Optionally, you can inspect the contents of the filesystem:
+
+```
+mkdir -p p
+sudo mount -t minix -o ro,loop linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd p
+find p -depth -type f
+ls -ld p/vmlinuz
+sudo umount p
+```
+
+Install QEMU. On Debian and Ubuntu, the install command is `sudo apt-get
+install qemu-system-x86`. The command `qemu-system-i386 --version` should
+work. The version number it displays should be >=2.11.1.
+
+Run this command to start the emulator running Linux 1.0.4:
+
+```
+qemu-system-i386 -M pc-1.0 -m 4 -drive file=linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd,format=vpc -boot c -debugcon stdio -net none -enable-kvm
+```
+
+(VirtualBox also works, but the VM guest
+setup is different.) In the newly appearing black QEMU window, in less than
+a second, at the `login:` prompt, type `root` and press <Enter>. There is no
+password.
+
+To undo the changes you've made, exit the emulator (by closing its window),
+remove the image file and decompress it again: `rm -f linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd && unzip
+-o linux-1.0.4-mcc-1.0-i386-and-gcc-2.5.8.vhd.zip`.
+
+The HDD disk image contains a single Minix v1 filesystem of size ~64 MiB,
+which is the maximum Minix v1 filesystem size, and Minix 1.5.10 doesn't
+support any other filesystems. Linux 1.0.4 (and MCC) supports much larger
+ext2 filesystems (even larger than ~504 MiB). If you need that, install MCC
+from the official floppies (see above), and choose ext2 when prompted.
+
+The HDD disk image uses the
+[mbr_bootlace.nasm](https://github.com/pts/mkfs-bootable-minix1/blob/master/mbr_bootlace.nasm)
+bootloader for booting, which is placed in the first 1024 bytes of the HDD
+image file. It loads the Linux kernel from the file named `/vmlinuz` in the
+Minix v1 filesystem on the HDD image file. Vanilla MCC 1.0 and most other
+Linux distributions of the time used the
+[LILO](https://en.wikipedia.org/wiki/LILO_(bootloader)) bootloader.
+mbr_bootlace.nasm is smaller and starts loading the kernel image earlier,
+because it doesn't wait for a user keypress.
+
+If you don't need GCC (or the assembler or the linker), download the
+somewhat smaller file
+[linux-1.0.4-mcc-1.0-i386.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v3/linux-1.0.4-mcc-1.0-i386.vhd.zip)
+instead.
+
+About the executable formats supported by MCC 1.0:
+
+* `gcc -s -O2 -W -Wall -Werror` creates a dynamically linked
+  (`/lib/libc.so.4.5.21`) a.out ZMAGIC (MCC 1.0 *file* says: OMAGIC)
+  executable by default.
+* `gcc -s -O2 -W -Wall -Werror -static` creates a statically linked a.out
+  ZMAGIC (MCC 1.0 *file* says: OMAGIC) executable by default. This is not
+  the same as the a.out format used by Minix i386.
+* Even though the supplied Linux 1.0.4 kernel can run them, the linker is not able to create [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)-32 executables.
+* It's complicated to create shared libraries (such as
+  `/lib/libc.so.4.5.21`), because there is no compiler support for
+  position-independent code, so the virtual address space for the library
+  has to be allocated globally on the system: e.g. *ls* and *find* expect
+  the *opendir* libc function to be at the same virtual address.
+
+Linux has never been released for the i86 or any 16-bit architecture. The
+very first architecture supported by Linux was the i386, and then many
+32-bit and 64-bit architectures followed.
+[ELKS](https://github.com/ghaerr/elks) is an early fork of Linux (first
+release: ELKS 0.0.63, released on 1997-08-08) for the i86.
+
+A comparison of Minix 1.5.10--2.0.4 i386 to Linux 1.0.4 i386:
+
+* Minix 1.5.10 supports the Minix v1 filesystem, Minix >=1.6.25 supports the
+  Minix v1 and Minix v2 filesystems. Linux 1.0.4 supports many filesystems
+  including Minix v1 (but not Minix v2), ext2, FAT (but no FAT32 or long
+  filenames), ISO9660 (on CD-ROMs, with the Rock Ridge extensions), NFS and
+  proc (`/proc`).
+* Minix supports Minix v1 and v2 filesystems created with maximum filename
+  length 14. Linux supports Minix v1 filesystems created with maximum
+  filename length either 14 or 30.
+* Linux is much faster in QEMU, probably because of better block caching.
+* The Linux 1.0.4 i386 kernel image (i.e. the code and data that remains in
+  memory, without .bss) is much larger than the Minix 1.5.10 i86 and i386
+  kernel: ~712 KiB uncompressed vs 75.52 KiB (without symbols) vs 93.94 KiB.
+  The C compilers used: GCC (optimizing) vs ACK 3.1 (optimizing) vs BCC
+  (non-optimizing).
+* The Linux kernel uses more memory than the Minix kernel.
+* Linux uses more memory per process than Minix.
+* Linux supports virtual memory and swapping, Minix doesn't. (The Minix
+  1.6.25 fork [Minix-386vm](https://ftp.funet.fi/pub/minix/Minix-386vm/) and
+  the Minix 1.7.0 fork
+  [Minix-vmd](https://web.archive.org/web/20250710222725/http://www.Minix-vmd.org/)
+  do though.)
+* Linux supports growing the memory available to a running process (using
+  both the sbrk(2) and mmap(2) system calls), Minix doesn't. On Minix, the
+  *a_total* field of the a.out header determines the maximum (same as the
+  minimum) available memory to a process. This can be changed after linking
+  in the executable program file, but it's not possible to change it for a
+  process which has already started.
+* MCC 1.0 feels much more convenient to use than Minix 1.5.10, partially
+  because of the command-line editing and history of the Bash shell (also
+  available for Minix i386), and because Linux provides multiple text
+  editors (Minix provides *vi* only).
+* Both Linux and Minix supports sharing code (in the .text section) between
+  multiple processes of the same executable program file.
+* Linux and supports sharing read-only data and read-write data between
+  multiple processes of the same executable program file, by default, using
+  copy-on-write pages. On Minix, data sections are always unshared.
+* Linux provides the `/proc` filesystem for inspecting the state of
+  processes and the kernel. Minix doesn't provide such a filesystem.
+
 ## The partial story of Minix 1.5.10 i386
 
 Minix 1.5.10 i86 (for the Intel 8086 CPU, with ability to use up to 16 MiB
@@ -293,8 +476,16 @@ publishing company defunct since 2020), so Minix had been proprietary
 software in the 1980s and 1990s. Prentice Hall has also published multiple
 educational (paper) books written by Andrew S. Tanenbaum about operating
 systems in general and Minix in particular. Buyers of some of these books
-also got automatically a license to use Minix. The most influential book,
-*Operating Systems: Design and Implementation*, co-authored by Albert S.
+also got automatically a license to use Minix, but they only had a printed
+copy of the source code, and they didn't get the C compiler. Buyers of some
+of these books got a discount when purchasing the Minix install floppies.
+The install floppies also contained the full source code of the Minix
+kernel, commands and C library, but it didn't contain the source code of the
+C preprocessor, the C compiler frontend, the C compiler backend and the
+assembler--linker.
+
+The most influential book, Operating Systems: Design and Implementation*,
+*co-authored by Albert S.
 Woodhull, published in 1987 by Prentice Hall includes the source code of
 Minix 1.0 i86. Between 1988 and 1990, multiple Minix reference manual books
 have been written by Andrew S. Tanenbaum, and published by Prentice Hall.
