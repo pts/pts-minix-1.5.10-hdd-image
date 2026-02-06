@@ -134,7 +134,8 @@ wget -O minix-1.5.10-i86-and-goodies.vhd.zip https://github.com/pts/pts-minix-1.
 , and decompress it with
 
 ```
-unzip -o minix-1.5.10-i86-and-goodies.vhd.zip```
+unzip -o minix-1.5.10-i86-and-goodies.vhd.zip
+```
 
 or `gunzip -S.zip -fk minix-1.5.10-i86-and-goodies.vhd.zip`.
 
@@ -238,7 +239,7 @@ work. The version number it displays should be >=2.11.1.
 
 Run this command to start the emulator running Minix 1.5.10:
 
-````
+```
 qemu-system-i386 -M pc-1.0 -m 4 -drive file=MINIX15.vhd,format=vpc -boot c -debugcon stdio -net none -enable-kvm
 ```
 
@@ -385,7 +386,9 @@ bootloader for booting, which is placed in the first 1024 bytes of the HDD
 image file. It loads the Linux kernel from the file named `/vmlinuz` in the
 Minix v1 filesystem on the HDD image file. Vanilla MCC 1.0 and most other
 Linux distributions of the time used the
-[LILO](https://en.wikipedia.org/wiki/LILO_(bootloader)) bootloader.
+[LILO](https://en.wikipedia.org/wiki/LILO_(bootloader)) bootloader
+([GRUB](https://en.wikipedia.org/wiki/GNU_GRUB) development started in 1995,
+and GRUB became widespread by 1999).
 mbr_bootlace.nasm is smaller and starts loading the kernel image earlier,
 because it doesn't wait for a user keypress.
 
@@ -455,6 +458,28 @@ A comparison of Minix 1.5.10--2.0.4 i386 to Linux 1.0.4 i386:
   copy-on-write pages. On Minix, data sections are always unshared.
 * Linux provides the `/proc` filesystem for inspecting the state of
   processes and the kernel. Minix doesn't provide such a filesystem.
+
+The reverse-historical perspective of Linux vs Minix is the following.
+Modern Linux distributions (in 2026) contain tons of application software by
+thousands of maintainers, developers and contributors in addition to the
+Linux kernel. MCC is one of the earliest Linux distributions containing
+precompiled applications (such as text editors, GCC, other developer tools,
+GNU troff, GNU Emacs, *mail* e-mail client, *lp* print spoller). MCC 1.0
+(1994-05-11) contains the Linux kernel 1.0.4 (1994-03-22), which is mostly a
+bugfix release over the Linux kernel 1.0 (1994-03-13), which is an evolution
+of the earliest Linux kernels (with 0.03 in 1991-10, 0.11 in 1991-12, 0.12
+on 1992-01-15, 0.95 on 1992-03-07, 0.98 on 1992-09-29), which were developed
+by Linus Torvalds using GCC 1... as a cross-compiler on a Minix 1.5.10 i386
+system (1990-06-15), which was a community port by Bruce Evans of Minix
+1.5.10 i86 (1990-06-01), which is an evolution of Minix 1.0 (1987-01-08) by
+Andrew Stuart Tanenbaum.
+
+[SLS-1992.11](https://github.com/oldlinux-web/oldlinux-files/blob/master/distributions/SLS/sls-1992.11.zip)
+(released on 1992-11-05) is an even earlier Linux distribution than MCC. It
+contains Linux kernel 0.98.1 (1992-10-04), Bash 1.12, GCC 2.2.2d, GNU
+assembler 1.38, GNU linker 1.38 and X386 2.0 providing X11 GUI. See
+[oldinux.org](https://oldlinux.org/) for details of some Linux kernels and
+distributions released in 1991 and 1992.
 
 ## The partial story of Minix 1.5.10 i386
 
