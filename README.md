@@ -309,6 +309,111 @@ sectors. These changes have been undone manually.
 
 Running ghost2vhd.pl requires only Perl, and it doesn't need Norton Ghost.
 
+## Running Linux 0.98.1 on Linux in QEMU
+
+[SLS 1992.11](https://github.com/oldlinux-web/oldlinux-files/blob/master/distributions/SLS/sls-1992.11.zip)
+(released on 1992-11-06) is one of the earliest Linux distributions. It
+contains Linux kernel 0.98.1 (1992-10-04), Bash 1.12, `/lib/libc.so` 4.1,
+GCC 2.2.2d, GNU assembler 1.38, GNU linker 1.38 and X386 2.0 providing X11
+GUI.
+
+For your convenience, a preinstalled, ready-to-run SLS 1992.11 binary image
+(no source code) is provided, based on the install floppies in
+[sls-1992.11.zip](https://github.com/oldlinux-web/oldlinux-files/blob/master/distributions/SLS/sls-1992.11.zip)
+(see also alternative link for
+[sls-1992.11.zip](https://sourceforge.net/projects/archiveos/files/s/sls/sls-1992.11.zip/download))
+and
+[sls-a4.zip](https://web.archive.org/web/20260211191307id_/https://discmaster.textfiles.com/file/36103/WCG%20-%20The%20Optical%20BBS%20WSC%20Disc%20-%201993.ISO/107/sls-a4.zip).
+In addition to that, it contains a newer bootloader a compressed kernel
+image. The HDD disk image contains a single, bootable ~64 MiB Minix v1
+filesystem on the top level (not in a partition) with maximum filename
+length of 14 bytes.
+
+Download the file
+[linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v4/linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd.zip):
+
+```
+wget -O linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd.zip https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v4/linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd.zip
+```
+
+, and decompress it with
+
+```
+unzip -o linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd.zip
+```
+
+or `gunzip -S.zip -fk linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd.zip`.
+
+Optionally, you can inspect the contents of the filesystem:
+
+```
+mkdir -p p
+sudo mount -t minix -o ro,loop linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd p
+find p -depth -type f
+ls -ld p/vmlinuz
+sudo umount p
+```
+
+Install QEMU. On Debian and Ubuntu, the install command is `sudo apt-get
+install qemu-system-x86`. The command `qemu-system-i386 --version` should
+work. The version number it displays should be >=2.11.1.
+
+Run this command to start the emulator running Linux 0.98.1:
+
+```
+qemu-system-i386 -M pc-1.0 -m 4 -drive file=linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd,format=vpc -boot c -debugcon stdio -net none -enable-kvm
+```
+
+(VirtualBox also works, but the VM guest
+setup is different.) In the newly appearing black QEMU window, in less than
+a second, at the `login:` prompt, type `root` and press <Enter>. There is no
+password.
+
+To undo the changes you've made, exit the emulator (by closing its window),
+remove the image file and decompress it again: `rm -f linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd && unzip
+-o linux-0.98.1-sls-1992.11-i386-and-gcc-2.2.2d.vhd.zip`.
+
+The HDD disk image contains a single Minix v1 filesystem of size ~64 MiB,
+which is the maximum Minix v1 filesystem size, and Minix 1.5.10 doesn't
+support any other filesystems. Linux 1.0.4 (and SLS) supports much larger
+ext filesystems (even larger than ~504 MiB). If you need that, install SLS
+from the official floppies (see above), create an ext filesystem (with the
+command *mkefs*) instead of a Minix filesystem (with the command *mkfs*)
+choose ext when prompted.
+
+The HDD disk image uses the
+[mbr_bootlace.nasm](https://github.com/pts/mkfs-bootable-minix1/blob/master/mbr_bootlace.nasm)
+bootloader for booting, which is placed in the first 1024 bytes of the HDD
+image file. It loads the Linux kernel from the file named `/vmlinuz` in the
+Minix v1 filesystem on the HDD image file. Vanilla SLS 1992.11 can't even boot from HDD, it needs a boot floppy, which contains the kernel only, and the root filesystem is on the HDD (typically on partition `/dev/hda2`). Later Linux distributions used the
+[LILO](https://en.wikipedia.org/wiki/LILO_(bootloader)) bootloader
+([GRUB](https://en.wikipedia.org/wiki/GNU_GRUB) development started in 1995,
+and GRUB became widespread by 1999).
+mbr_bootlace.nasm is smaller than LILO, and starts loading the kernel image
+earlier, because it doesn't wait for a user keypress.
+
+If you don't need GCC (or the assembler or the linker), download the
+somewhat smaller file
+[linux-0.98.1-sls-1992.11-i386.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v4/linux-0.98.1-sls-1992.11-i386.vhd.zip)
+instead.
+
+About the executable formats supported by SLS 1992.11:
+
+* `gcc -s -O2 -W -Wall -Werror` creates a dynamically linked
+  (`/lib/libc.so.4.5.21`) a.out ZMAGIC (SLS 1992.11 *file* says:
+  demand-paged pure) executable by default.
+* `gcc -s -O2 -W -Wall -Werror -static` creates a statically linked a.out
+  ZMAGIC (SLS 1992.11 *file* says: demand-paged pure) executable by default.
+  This is not the same as the a.out format used by Minix i386.
+* Linux 0.98.1 isn't able to run
+  [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)-32
+  executables.
+* It's complicated to create shared libraries (such as
+  `/lib/libc.so.4.1`), because there is no compiler support for
+  position-independent code, so the virtual address space for the library
+  has to be allocated globally on the system: e.g. *ls* and *find* expect
+  the *opendir* libc function to be at the same virtual address.
+
 ## Running Linux 1.0.4 on Linux in QEMU
 
 [MCC
@@ -405,81 +510,15 @@ About the executable formats supported by MCC 1.0:
 * `gcc -s -O2 -W -Wall -Werror -static` creates a statically linked a.out
   ZMAGIC (MCC 1.0 *file* says: OMAGIC) executable by default. This is not
   the same as the a.out format used by Minix i386.
-* Even though the supplied Linux 1.0.4 kernel can run them, the linker is not able to create [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)-32 executables.
+* Even though the supplied Linux 1.0.4 kernel can run them, the linker is
+  not able to create
+  [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)-32
+  executables.
 * It's complicated to create shared libraries (such as
   `/lib/libc.so.4.5.21`), because there is no compiler support for
   position-independent code, so the virtual address space for the library
   has to be allocated globally on the system: e.g. *ls* and *find* expect
   the *opendir* libc function to be at the same virtual address.
-
-Linux has never been released for the i86 or any 16-bit architecture. The
-very first architecture supported by Linux was the i386, and then many
-32-bit and 64-bit architectures followed.
-[ELKS](https://github.com/ghaerr/elks) is an early fork of Linux (first
-release: ELKS 0.0.63, released on 1997-08-08) for the i86.
-
-A comparison of Minix 1.5.10--2.0.4 i386 to Linux 1.0.4 i386:
-
-* Minix 1.5.10 supports the Minix v1 filesystem, Minix >=1.6.25 supports the
-  Minix v1 and Minix v2 filesystems. Linux 1.0.4 supports many filesystems
-  including Minix v1 (but not Minix v2), ext2, FAT (but no FAT32 or long
-  filenames), ISO9660 (on CD-ROMs, with the Rock Ridge extensions), NFS and
-  proc (`/proc`).
-* Minix supports Minix v1 and v2 filesystems created with maximum filename
-  length 14. Linux supports Minix v1 filesystems created with maximum
-  filename length either 14 or 30.
-* Linux is much faster in QEMU, probably because of better block caching.
-* The Linux 1.0.4 i386 kernel image (i.e. the code and data that remains in
-  memory, without .bss) is much larger than the Minix 1.5.10 i86 and i386
-  kernel: ~712 KiB uncompressed vs 75.52 KiB (without symbols) vs 93.94 KiB.
-  The C compilers used: GCC (optimizing) vs ACK 3.1 (optimizing) vs BCC
-  (non-optimizing).
-* The Linux kernel uses more memory than the Minix kernel.
-* Linux uses more memory per process than Minix.
-* Linux supports virtual memory and swapping, Minix doesn't. (The Minix
-  1.6.25 fork [Minix-386vm](https://ftp.funet.fi/pub/minix/Minix-386vm/) and
-  the Minix 1.7.0 fork
-  [Minix-vmd](https://web.archive.org/web/20250710222725/http://www.Minix-vmd.org/)
-  do though.)
-* Linux supports growing the memory available to a running process (using
-  both the sbrk(2) and mmap(2) system calls), Minix doesn't. On Minix, the
-  *a_total* field of the a.out header determines the maximum (same as the
-  minimum) available memory to a process. This can be changed after linking
-  in the executable program file, but it's not possible to change it for a
-  process which has already started.
-* MCC 1.0 feels much more convenient to use than Minix 1.5.10, partially
-  because of the command-line editing and history of the Bash shell (also
-  available for Minix i386), and because Linux provides multiple text
-  editors (Minix provides *vi* only).
-* Both Linux and Minix supports sharing code (in the .text section) between
-  multiple processes of the same executable program file.
-* Linux and supports sharing read-only data and read-write data between
-  multiple processes of the same executable program file, by default, using
-  copy-on-write pages. On Minix, data sections are always unshared.
-* Linux provides the `/proc` filesystem for inspecting the state of
-  processes and the kernel. Minix doesn't provide such a filesystem.
-
-The reverse-historical perspective of Linux vs Minix is the following.
-Modern Linux distributions (in 2026) contain tons of application software by
-thousands of maintainers, developers and contributors in addition to the
-Linux kernel. MCC is one of the earliest Linux distributions containing
-precompiled applications (such as text editors, GCC, other developer tools,
-GNU troff, GNU Emacs, *mail* e-mail client, *lp* print spoller). MCC 1.0
-(1994-05-11) contains the Linux kernel 1.0.4 (1994-03-22), which is mostly a
-bugfix release over the Linux kernel 1.0 (1994-03-13), which is an evolution
-of the earliest Linux kernels (with 0.03 in 1991-10, 0.11 in 1991-12, 0.12
-on 1992-01-15, 0.95 on 1992-03-07, 0.98 on 1992-09-29), which were developed
-by Linus Torvalds using GCC 1... as a cross-compiler on a Minix 1.5.10 i386
-system (1990-06-15), which was a community port by Bruce Evans of Minix
-1.5.10 i86 (1990-06-01), which is an evolution of Minix 1.0 (1987-01-08) by
-Andrew Stuart Tanenbaum.
-
-[SLS-1992.11](https://github.com/oldlinux-web/oldlinux-files/blob/master/distributions/SLS/sls-1992.11.zip)
-(released on 1992-11-05) is an even earlier Linux distribution than MCC. It
-contains Linux kernel 0.98.1 (1992-10-04), Bash 1.12, GCC 2.2.2d, GNU
-assembler 1.38, GNU linker 1.38 and X386 2.0 providing X11 GUI. See
-[oldinux.org](https://oldlinux.org/) for details of some Linux kernels and
-distributions released in 1991 and 1992.
 
 ## The partial story of Minix 1.5.10 i386
 
@@ -495,28 +534,27 @@ custom-modified ACK C compiler (/usr/lib/cpp, /usr/lib/cem, /usr/lib/opt,
 (/usr/bin/cc, it just runs the others) and the source code of the C library
 (i.e. libc) were included.
 
-Most of Minix 1.5.10 (and earlier versions) has been written by Andrew S.
-Tanenbaum (with contributions from others) and copyright Prentical Hall (a
-publishing company defunct since 2020), so Minix had been proprietary
-software in the 1980s and 1990s. Prentice Hall has also published multiple
-educational (paper) books written by Andrew S. Tanenbaum about operating
-systems in general and Minix in particular. Buyers of some of these books
-also got automatically a license to use Minix, but they only had a printed
-copy of the source code, and they didn't get the C compiler. Buyers of some
-of these books got a discount when purchasing the Minix install floppies.
-The install floppies also contained the full source code of the Minix
-kernel, commands and C library, but it didn't contain the source code of the
-C preprocessor, the C compiler frontend, the C compiler backend and the
-assembler--linker.
+Most of Minix 1.5.10 (and earlier versions) has been written by Andrew
+Stuart Tanenbaum (with contributions from others) and copyright Prentical
+Hall (a publishing company defunct since 2020), so Minix had been
+proprietary software in the 1980s and 1990s. Prentice Hall has also
+published multiple educational (paper) books written by Andrew Stuart
+Tanenbaum about operating systems in general and Minix in particular. Buyers
+of some of these books also got automatically a license to use Minix, but
+they only had a printed copy of the source code, and they didn't get the C
+compiler. Buyers of some of these books got a discount when purchasing the
+Minix install floppies. The install floppies also contained the full source
+code of the Minix kernel, commands and C library, but it didn't contain the
+source code of the C preprocessor, the C compiler frontend, the C compiler
+backend and the assembler--linker.
 
 The most influential book, Operating Systems: Design and Implementation*,
-*co-authored by Albert S.
-Woodhull, published in 1987 by Prentice Hall includes the source code of
-Minix 1.0 i86. Between 1988 and 1990, multiple Minix reference manual books
-have been written by Andrew S. Tanenbaum, and published by Prentice Hall.
-None of the books mentioned in this paragraph are freely available for
-download in 2025. However, Minix
-was released as open source under the 3-clause BSD license on 2000-04-07,
+*co-authored by Albert S. Woodhull, published in 1987 by Prentice Hall
+includes the source code of Minix 1.0 i86. Between 1988 and 1990, multiple
+Minix reference manual books have been written by Andrew Stuart Tanenbaum,
+and published by Prentice Hall. None of the books mentioned in this
+paragraph are freely available for download in 2025. However, Minix was
+released as open source under the 3-clause BSD license on 2000-04-07,
 applying retroactively to versions released earlier as well, see the
 [announcement](https://web.archive.org/web/20250726134343/https://minix1.woodhull.com/faq/mxlicense.html).
 
@@ -528,7 +566,7 @@ the install instructions.
 
 There had been no official Minix 1.5.x i386 or Minix 1.6.x release (with
 userspace programs using the i386 32-bit protected mode instruction set and
-being able to use more than 64 KiB of data per process) by Andrew S.
+being able to use more than 64 KiB of data per process) by Andrew Stuart
 Tanenbaum (or other Minix authors) so far. [Minix
 1.7.0](http://download.minix3.org/previous-versions/Intel-1.7/) was released
 for both i86 and i386 on 1995-05-30. However, there have been unofficial
@@ -594,3 +632,89 @@ which can read the Minix 1.5.10 ar .a archive format (such as
 * Minix-386vm 1.6.25.1 i386: BCC (bcc command), GCC (gcc command), C386 (ccc command).
 * Minix 1.7.0 i86 and i386: ACK.
 * Minix-vmd 1.7.0 i386: ACK, GCC.
+
+## The first 4 years of Linux
+
+Linus Torvalds started development of the Linux kernel in 1991. In the
+beginning, Linux supported the i386 architecture on (IBM-compatible) PCs.
+Many 32-bit and 64-bit architectures have been added since, but not a
+single 16-bit architecture (so no i86).
+[ELKS](https://github.com/ghaerr/elks) is an early fork of Linux (first
+release: ELKS 0.0.63, released on 1997-08-08) for the i86.
+
+The video [Installing Linux Like It's
+1992](https://www.youtube.com/watch?v=9mRl6faPjHQ) gives a nice introduction
+to the first 2 years (1991--1992) of Linux, with a timeline, including
+kernel development and early Linux distributrions (bootdisk-rootdisk, SLS,
+MCC, MJ, Yggdrasil).
+
+The website [oldlinux.org](https://oldlinux.org/) is a rich collection of
+source code, disk images, documentation and books about the first 2 years
+(1991--1992) of Linux.
+
+The reverse-historical perspective of Linux vs Minix is the following.
+Modern Linux distributions (in 2026) contain tons of application software by
+thousands of maintainers, developers and contributors in addition to the
+Linux kernel. MCC is one of the earliest Linux distributions containing
+precompiled applications (such as text editors, GCC, other developer tools,
+GNU troff, GNU Emacs, *mail* e-mail client, *lp* print spoller). MCC 1.0
+(1994-05-11) contains the Linux kernel 1.0.4 (1994-03-22), which is mostly a
+bugfix release over the Linux kernel 1.0 (1994-03-13), which is an evolution
+of the earliest Linux kernels (with 0.03 in 1991-10, 0.11 in 1991-12, 0.12
+on 1992-01-15, 0.95 on 1992-03-07, 0.98 on 1992-09-29), which were developed
+by Linus Torvalds using GCC 1.37 and 1.40 as a cross-compiler on a Minix
+1.5.10 i386 system (1990-06-15), which was a community port by Bruce Evans
+of Minix 1.5.10 i86 (1990-06-01), which is an evolution of Minix 1.0
+(1987-01-08) by Andrew Stuart Tanenbaum.
+
+A comparison of Minix 1.5.10--2.0.4 i386 to Linux 1.0.4 i386 (1994-05-11):
+
+* Minix 1.5.10 supports the Minix v1 filesystem, Minix >=1.6.25 supports the
+  Minix v1 and Minix v2 filesystems. Linux 1.0.4 supports many filesystems
+  including Minix v1 (but not Minix v2), ext2, FAT (but no FAT32 or long
+  filenames), ISO9660 (on CD-ROMs, with the Rock Ridge extensions), NFS and
+  proc (`/proc`). Linux 0.98.1 supports the now-obsolete ext filesystem,
+  but not the ext2 filesystem yet.
+* Minix supports Minix v1 and v2 filesystems created with maximum filename
+  length 14. Linux 1.0.4 supports Minix v1 filesystems created with maximum
+  filename length either 14 or 30. (Linux 0.98.1 supports Minix v1
+  filesystems created with maximum filname length 14.)
+* Linux is much faster in QEMU, probably because of better block caching.
+* Most of the Linux 1.0.4 kernel image is compressed with Deflate (gzip),
+  and it decompresses itself at boot time. The Minix kernel image is
+  uncompressed. (The Linux 0.98.1 kernel image is uncompressed.)
+* The Linux 1.0.4 i386 kernel image (i.e. the code and data that remains in
+  memory, without .bss) is much larger than the Minix 1.5.10 i86 and i386
+  kernel: ~712 KiB uncompressed vs 75.52 KiB (without symbols) vs 93.94 KiB.
+  The C compilers used: GCC (optimizing) vs ACK 3.1 (optimizing) vs BCC
+  (non-optimizing).
+* The Linux kernel uses more memory than the Minix kernel.
+* Linux uses more memory per process than Minix.
+* Linux supports virtual memory and swapping, Minix doesn't. (The Minix
+  1.6.25 fork [Minix-386vm](https://ftp.funet.fi/pub/minix/Minix-386vm/) and
+  the Minix 1.7.0 fork
+  [Minix-vmd](https://web.archive.org/web/20250710222725/http://www.Minix-vmd.org/)
+  do though.)
+* Linux supports growing the memory available to a running process (using
+  both the sbrk(2) and mmap(2) system calls), Minix doesn't. On Minix, the
+  *a_total* field of the a.out header determines the maximum (same as the
+  minimum) available memory to a process. This can be changed after linking
+  in the executable program file, but it's not possible to change it for a
+  process which has already started.
+* MCC 1.0 feels much more convenient to use than Minix 1.5.10, partially
+  because of the command-line editing and history of the Bash shell (also
+  available for Minix i386), and because Linux provides multiple text
+  editors (Minix provides *vi* only).
+* Both Linux and Minix supports sharing code (in the .text section) between
+  multiple processes of the same executable program file.
+* Linux and supports sharing read-only data and read-write data between
+  multiple processes of the same executable program file, by default, using
+  copy-on-write pages. On Minix, data sections are always unshared.
+* Linux provides the `/proc` filesystem for inspecting the state of
+  processes and the kernel. Minix doesn't provide such a filesystem.
+* Linux 1.0.4 (but not Linux 0.98.1) is able the run
+  [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)-32
+  executables, Minix 1.5.10--2.0.4 isn't, Minix 3.2--3.3 is.
+* Linux can run a.out ZMAGIC executables. Minix 1.5.10--3.1 is able to run
+  a.out executables of the Minix format, which is different from the format
+  used by Linux and BSD.
