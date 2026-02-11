@@ -311,11 +311,12 @@ Running ghost2vhd.pl requires only Perl, and it doesn't need Norton Ghost.
 
 ## Running Linux 0.98.1 on Linux in QEMU
 
-[SLS 1992.11](https://github.com/oldlinux-web/oldlinux-files/blob/master/distributions/SLS/sls-1992.11.zip)
+[SLS
+1992.11](https://github.com/oldlinux-web/oldlinux-files/blob/master/distributions/SLS/sls-1992.11.zip)
 (released on 1992-11-06) is one of the earliest Linux distributions. It
 contains Linux kernel 0.98.1 (1992-10-04), Bash 1.12, `/lib/libc.so` 4.1,
-GCC 2.2.2d, GNU assembler 1.38, GNU linker 1.38 and X386 2.0 providing X11
-GUI.
+GCC 2.2.2d, GNU assembler 1.38, GNU linker 1.38, Perl 4.035 and X386 2.0
+providing X11 GUI.
 
 For your convenience, a preinstalled, ready-to-run SLS 1992.11 binary image
 (no source code) is provided, based on the install floppies in
@@ -392,7 +393,7 @@ and GRUB became widespread by 1999).
 mbr_bootlace.nasm is smaller than LILO, and starts loading the kernel image
 earlier, because it doesn't wait for a user keypress.
 
-If you don't need GCC (or the assembler or the linker), download the
+If you don't need GCC (or the assembler or the linker) or Perl, download the
 somewhat smaller file
 [linux-0.98.1-sls-1992.11-i386.vhd.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v4/linux-0.98.1-sls-1992.11-i386.vhd.zip)
 instead.
