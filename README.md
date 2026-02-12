@@ -318,6 +318,13 @@ contains Linux kernel 0.98.1 (1992-10-04), Bash 1.12, `/lib/libc.so` 4.1,
 GCC 2.2.2d, GNU assembler 1.38, GNU linker 1.38, Perl 4.035 and X386 2.0
 providing X11 GUI.
 
+[sls9211.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v4/sls9211.zip)
+contains the disk images of all the 5.25" 1.2MB install floppies (including
+the *a4* floppy) of SLS 1992.11. If you want to install SLS 1991.11
+yourself, download
+[sls9211.zip](https://github.com/pts/pts-minix-1.5.10-hdd-image/releases/download/v4/sls9211.zip),
+extract (uncompress) it, and follow the instructions in the file sls9211.md.
+
 For your convenience, a preinstalled, ready-to-run SLS 1992.11 binary image
 (no source code) is provided, based on the install floppies in
 [sls-1992.11.zip](https://github.com/oldlinux-web/oldlinux-files/blob/master/distributions/SLS/sls-1992.11.zip)
