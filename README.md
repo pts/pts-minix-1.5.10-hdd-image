@@ -286,7 +286,7 @@ The MINIX15.vhd HDD image was obtained like this:
 
 ```
 $ wget -O MINIX15.img.tar.gz https://download.oldlinux.org/MINIX15.img.tar.gz
-$ tar xvf MINIX15.img.tar.gz MINIX15.img
+$ tar xzvf MINIX15.img.tar.gz MINIX15.img
 $ rm -f MINIX15.img.tar.gz
 $ mv MINIX15.img MINIX15.gho
 $ perl -x ghost2vhd.pl
